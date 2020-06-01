@@ -6,6 +6,8 @@ COPY package*.json ./
 RUN npm install
 # Copy app source code
 COPY . .
+RUN npm install --prefix ./client
 #Expose port and start application
 EXPOSE 5000
+EXPOSE 3000
 CMD [ "npm", "start" ]
