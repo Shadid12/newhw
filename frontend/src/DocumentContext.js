@@ -8,13 +8,22 @@ export const DocumentContextConsumer = DocumentContext.Consumer;
 
 // enums
 export const UPDATE_CURRENT_DOCUMENT = 'UPDATE_CURRENT_DOCUMENT';
+export const CREATE_NEW_DOC = 'CREATE_NEW_DOC';
+export const NEW_DOCUMENT_CREATED = 'NEW_DOCUMENT_CREATED';
+
+const initialState = {
+  docTitle: "Untitled*",
+  docBody: "Edit your document",
+  selectedDoc: "unsaved"
+}
 
 export class DocumentContextProvider extends React.Component {
     state = {
       docTitle: "Untitled*",
       docBody: "Edit your document",
-      resourceTitle: "Untitled*",
+      resourceTitle: "",
       resourceBody: "",
+      selectedDoc: "",
       documents: []
     };
 
@@ -38,6 +47,23 @@ export class DocumentContextProvider extends React.Component {
             ...prevState,
             [name]: value
           }))
+          break;
+
+        case CREATE_NEW_DOC: 
+          this.setState(prevState => ({
+            ...prevState,
+            ...initialState
+          }));
+          break;
+        case NEW_DOCUMENT_CREATED:
+          this.setState(prevState => {
+            const newDocuments = JSON.parse(JSON.stringify(prevState.documents)); 
+            newDocuments.push(payload)
+            return {
+              ...prevState,
+              documents: newDocuments
+            }
+          });
           break;
         default:
           break;
