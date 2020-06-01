@@ -6,7 +6,7 @@ COPY package*.json ./
 RUN npm install
 # Copy app source code
 COPY . .
-RUN npm install --prefix ./client
+RUN npm install --prefix ./frontend
 #Expose port and start application
 EXPOSE 5000
 EXPOSE 3000
