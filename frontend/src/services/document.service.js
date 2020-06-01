@@ -9,3 +9,22 @@ export const create = async payload => {
         return error
     }
 }
+
+
+export const getAll = async () => {
+    try {
+        const res = await axios.get(SERVER_URL + 'documents');
+        return res.data
+    } catch (error) {
+        return error
+    }
+}
+
+export const update = async payload => {
+    try {
+        const res = await axios.put(SERVER_URL + `documents/${payload.id}`, payload);
+        return res.data
+    } catch (error) {
+        return error
+    }
+}

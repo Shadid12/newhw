@@ -1,9 +1,11 @@
 import React from 'react';
-import DocumentContext, { 
+import DocumentContext, 
+{ 
     UPDATE_CURRENT_DOCUMENT, 
-    NEW_DOCUMENT_CREATED 
+    NEW_DOCUMENT_CREATED,
+    UPDATE_SINGLE_DOCUMENT
 } from '../DocumentContext';
-import { create } from '../services/document.service'
+import { create, update } from '../services/document.service'
 
 function EditDoc() {
     const [loading, setLoading] = React.useState(false)
@@ -22,10 +24,21 @@ function EditDoc() {
             title: docTitle,
             body: docBody
         }
-        let res = await create(payload)
-        if(res.success) {
-            // update global store
-            contextVal.updateState({type: NEW_DOCUMENT_CREATED, payload: res.data})
+
+        // Create if it is a new Document update otherwise
+        if(selectedDoc === 'unsaved') {
+            const res = await create(payload)
+            if(res.success) {
+                contextVal.updateState({type: NEW_DOCUMENT_CREATED, payload: res.data})
+            }
+        } else {
+            payload.id = selectedDoc
+            const res = await update(payload)
+            if(res.success) {
+                // update existing document
+                contextVal.updateState({type: UPDATE_SINGLE_DOCUMENT, payload: res.data})
+                // contextVal.updateState({type: NEW_DOCUMENT_CREATED, payload: res.data});
+            }
         }
         setLoading(false)
         
@@ -54,6 +67,9 @@ function EditDoc() {
             </label>
             <br />
             <input type="submit" value="Save" />
+            {selectedDoc !== '' && selectedDoc !== 'unsaved' ? (
+                <button>Delete 🗑️</button>
+            ) : null}
         </form>
     )
 }

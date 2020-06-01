@@ -1,6 +1,5 @@
 import React from "react";
-import axios from "axios";
-import {SERVER_URL} from './config'
+import { getAll } from './services/document.service'
 
 const DocumentContext = React.createContext();
 
@@ -10,6 +9,8 @@ export const DocumentContextConsumer = DocumentContext.Consumer;
 export const UPDATE_CURRENT_DOCUMENT = 'UPDATE_CURRENT_DOCUMENT';
 export const CREATE_NEW_DOC = 'CREATE_NEW_DOC';
 export const NEW_DOCUMENT_CREATED = 'NEW_DOCUMENT_CREATED';
+export const EDIT_DOCUMENT = 'EDIT_DOCUMENT';
+export const UPDATE_SINGLE_DOCUMENT = 'UPDATE_SINGLE_DOCUMENT';
 
 const initialState = {
   docTitle: "Untitled*",
@@ -17,6 +18,7 @@ const initialState = {
   selectedDoc: "unsaved"
 }
 
+// TODO: Make it functional
 export class DocumentContextProvider extends React.Component {
     state = {
       docTitle: "Untitled*",
@@ -28,17 +30,17 @@ export class DocumentContextProvider extends React.Component {
     };
 
     async componentDidMount() {
-      try {
-        const res = await axios.get(SERVER_URL + 'documents');
-        this.setState(prevState => ({
-          ...prevState,
-          documents: res.data.data
-        }))
-      } catch (error) {
-        console.log('error', error)
+      const res = await getAll();
+      if(!res.success) {
+        alert('Server Error!! please reload page') // TODO handle error with UI friendly method
       }
+      this.setState(prevState => ({
+        ...prevState,
+        documents: res.data
+      }))
     }
-  
+
+    // Context Action
     updateState = ({type, payload}) => {
       switch(type) {
         case UPDATE_CURRENT_DOCUMENT:
@@ -64,6 +66,25 @@ export class DocumentContextProvider extends React.Component {
               documents: newDocuments
             }
           });
+          break;
+        case EDIT_DOCUMENT:
+          this.setState(prevState => ({
+            ...prevState,
+            docTitle: payload.title,
+            docBody: payload.body,
+            selectedDoc: payload._id
+          }))
+          break;
+        case UPDATE_SINGLE_DOCUMENT:
+          this.setState(prevState => {
+            const newDocuments = JSON.parse(JSON.stringify(prevState.documents)); 
+            const index = newDocuments.findIndex((i) => i._id === payload._id);
+            newDocuments[index] = payload
+            return {
+              ...prevState,
+              documents: newDocuments
+            }
+          }); 
           break;
         default:
           break;
