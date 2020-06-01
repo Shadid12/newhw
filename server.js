@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const connectDB = require('./config/db');
 const documents = require('./routes/documents');
 const resources = require('./routes/resources');
+const cors = require('cors')
 
 // Load env vars
 dotenv.config({ path: './config/config.env' });
@@ -13,6 +14,9 @@ const app = express();
 
 // Body parser
 app.use(express.json());
+
+// Enable CORS
+app.use(cors()); // TODO: Whitelist CORS when frontend moves to a different microservice
 
 app.use(morgan('dev'));
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import DocumentContext, { UPDATE_CURRENT_DOCUMENT } from '../DocumentContext';
 import Resource from './Resource';
+import Sidebar from './Sidebar';
 
 function Home() {
 
@@ -19,6 +20,7 @@ function Home() {
 
     return (
       <div>
+        <Sidebar />
         <h1>New Document</h1>
         <form onSubmit={handleSubmit}>
             <label>
