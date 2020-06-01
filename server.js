@@ -1,8 +1,9 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
-const documents = require('./routes/documents');
 const connectDB = require('./config/db');
+const documents = require('./routes/documents');
+const resources = require('./routes/resources');
 
 // Load env vars
 dotenv.config({ path: './config/config.env' });
@@ -20,6 +21,7 @@ connectDB();
 
 // Mount routers
 app.use('/api/v1/documents', documents);
+app.use('/api/v1/resources', resources);
 
 const PORT = process.env.PORT || 5000;
 
