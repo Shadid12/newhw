@@ -15,6 +15,7 @@ export const UPDATE_SINGLE_DOCUMENT = 'UPDATE_SINGLE_DOCUMENT';
 export const DELETE_SINGLE_DOCUMET = 'DELETE_SINGLE_DOCUMET';
 export const UPDATE_RESOURCE = 'UPDATE_RESOURCE';
 export const RELOAD_RESOURCES = 'RELOAD_RESOURCES';
+export const DELETE_RESOURCE = 'DELETE_RESOURCE';
 
 const initialState = {
   docTitle: "Untitled*",
@@ -140,6 +141,17 @@ export class DocumentContextProvider extends React.Component {
             }
           });
           break;
+          case DELETE_RESOURCE:
+            this.setState(prevState => {
+              const newResources = JSON.parse(JSON.stringify(prevState.resources)); 
+              const index = newResources.findIndex((i) => i._id === payload);
+              newResources.splice(index, 1)
+              return {
+                ...prevState,
+                resources: newResources
+              }
+            });
+            break;
         default:
           break;
       }

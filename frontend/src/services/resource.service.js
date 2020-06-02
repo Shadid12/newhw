@@ -27,3 +27,12 @@ export const updateResource = async payload => {
         return error
     }
 }
+
+export const deleteResource = async id => {
+    try {
+        const res = await axios.delete(SERVER_URL + 'resources/' + id);
+        return res.data
+    } catch (error) {
+        return error
+    }
+}

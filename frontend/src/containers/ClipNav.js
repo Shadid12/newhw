@@ -3,9 +3,10 @@ import DocumentContext,
 { 
     UPDATE_CURRENT_DOCUMENT, 
     UPDATE_RESOURCE,
-    RELOAD_RESOURCES
+    RELOAD_RESOURCES,
+    DELETE_RESOURCE
 } from '../DocumentContext';
-import {create, updateResource} from '../services/resource.service'
+import {create, updateResource, deleteResource} from '../services/resource.service'
 
 import './clip-nav.css';
 
@@ -53,6 +54,13 @@ function ClipNav() {
 
     const editResource = reference => {
      contextVal.updateState({type: UPDATE_RESOURCE, payload: reference})   
+    }
+
+    const deleteCurrent = async reference => {
+        const res = await deleteResource(reference._id);
+        if(res.success) {
+            contextVal.updateState({type: DELETE_RESOURCE, payload: reference._id})
+        }
     }
 
     if(selectedDoc === '') {
@@ -104,7 +112,10 @@ function ClipNav() {
                                     event.preventDefault()
                                     editResource(item)
                                 }}>Edit ✏️</button>
-                                <button>Delete 🗑️</button>
+                                <button onClick={event => {
+                                    event.preventDefault()
+                                    deleteCurrent(item)
+                                }}>Delete 🗑️</button>
                             </li>
                         )
                     }
