@@ -4,6 +4,7 @@ import DocumentContext, {EDIT_DOCUMENT} from '../DocumentContext';
 function DocList() {
     const contextVal = React.useContext(DocumentContext);
     const { documents } =  contextVal.state;
+
     React.useEffect(() => {
     },[documents])
 

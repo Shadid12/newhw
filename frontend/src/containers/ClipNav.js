@@ -37,6 +37,10 @@ function ClipNav() {
             alert('You must save your document first before you can attach references')
             return;
         }
+        if(resourceTitle === "" || resourceBody === "") {
+            alert('Please make sure to fill in title and body of your reference')
+            return;
+        }
         let payload = {
             title: resourceTitle,
             body: resourceBody,
@@ -48,6 +52,7 @@ function ClipNav() {
             // Reload Resources
             if(res.success) {
                 contextVal.updateState({type: RELOAD_RESOURCES, payload: res.data})
+                window.scrollTo(0, document.body.scrollHeight )
             }
         } else {
             payload.id = resourceId;
@@ -64,7 +69,8 @@ function ClipNav() {
     }
 
     const editResource = reference => {
-     contextVal.updateState({type: UPDATE_RESOURCE, payload: reference})   
+        contextVal.updateState({type: UPDATE_RESOURCE, payload: reference});
+        window.scrollTo(0,0)
     }
 
     const deleteCurrent = async reference => {
@@ -76,6 +82,13 @@ function ClipNav() {
 
     const uploadFile = async event => {
         event.preventDefault();
+        if(selectedDoc === 'unsaved') {
+            alert('You must save your document first before you can attach references')
+            return;
+        }
+        if(uploadInfo.title === '' || !uploadInfo.file) {
+            alert('Can not upload file. Please make sure you have a file title and proper file format')
+        }
         const data = new FormData();
         data.append('resourceFile', uploadInfo.file);
         data.append('title', uploadInfo.title);
@@ -174,7 +187,7 @@ function ClipNav() {
                     if(item.documentId === selectedDoc) {
                         if(item.type === 'link/text') {
                             return (
-                                <li key={item._id}>
+                                <div key={item._id}>
                                     <span>{item.title}</span> | 
                                     <button onClick={event => {
                                         event.preventDefault()
@@ -184,11 +197,11 @@ function ClipNav() {
                                         event.preventDefault()
                                         deleteCurrent(item)
                                     }}>Delete 🗑️</button>
-                                </li>
+                                </div>
                             )
                         } else {
                             return (
-                                <li key={item._id}>
+                                <div key={item._id}>
                                     <span>{item.title}</span> | 
                                     <button onClick={event => {
                                         event.preventDefault()
@@ -198,7 +211,7 @@ function ClipNav() {
                                         event.preventDefault()
                                         deleteCurrent(item)
                                     }}>Delete 🗑️</button>
-                                </li>
+                                </div>
                             )
                         }
                     }

@@ -32,6 +32,11 @@ function EditDoc() {
 
     const handleSubmit = async event => {
         event.preventDefault();
+        if(docTitle === '' || docBody === '') {
+            alert('Please make sure title and body is not empty');
+            setLoading(false);
+            return;
+        }
         setLoading(true)
         let payload = {
             title: docTitle,
