@@ -84,3 +84,20 @@ exports.deleteResource = async (req, res, next) => {
         res.status(400).json({ success: false });
     }
 };
+
+// @desc      Delete Resource
+// @route     D /api/v1/resources/download/:id
+// @access    Private
+exports.downloadResource = async (req, res, next) => {
+    try {
+        const resource = await Resource.findById(req.params.id);
+    
+        if (!resource) {
+          return res.status(400).json({ success: false });
+        }
+        let file = `./uploads/${resource.body}`
+        res.download(file);
+    } catch (err) {
+        res.status(400).json({ success: false });
+    }
+}

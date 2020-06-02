@@ -22,7 +22,9 @@ const ResourceSchema = new mongoose.Schema({
     documentId: {
         type: String,
         required: [true, 'Resource must belong to a document']
-    }
+    },
+
+    mimeType: String
 
 })
 

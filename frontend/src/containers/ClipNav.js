@@ -1,4 +1,5 @@
 import React from 'react';
+import { SERVER_URL } from '../config'
 import DocumentContext, 
 { 
     UPDATE_CURRENT_DOCUMENT, 
@@ -6,7 +7,7 @@ import DocumentContext,
     RELOAD_RESOURCES,
     DELETE_RESOURCE
 } from '../DocumentContext';
-import {create, updateResource, deleteResource} from '../services/resource.service'
+import {create, updateResource, deleteResource, downloadResource} from '../services/resource.service'
 
 import './clip-nav.css';
 import axios from 'axios';
@@ -14,7 +15,6 @@ import axios from 'axios';
 function ClipNav() {
     const [uploadInfo, setUploadInfo] = React.useState({
         title: '',
-        body: '',
         file: null
     });
 
@@ -75,18 +75,19 @@ function ClipNav() {
         const data = new FormData();
         data.append('resourceFile', uploadInfo.file);
         data.append('title', uploadInfo.title);
-        data.append('body', uploadInfo.body);
         data.append('type', 'file');
         data.append('documentId', selectedDoc);
         
         try {
             const ress = await axios.post("http://localhost:5000/api/v1/resources", data, {});
-            if(ress.success) {
+            console.log('---->>>', ress)
+            if(ress.data.success) {
                 setUploadInfo({
                     title: '',
                     body: '',
                     file: ''
                 });
+                contextVal.updateState({type: RELOAD_RESOURCES, payload: ress.data.data})
             }
         } catch (error) {
             console.error('--->>>', error)
@@ -107,6 +108,10 @@ function ClipNav() {
             ...prevState,
             [name]: value
         }))
+    }
+
+    const downloadFile = id => {
+        window.open(SERVER_URL + 'resources/download/' + id)
     }
 
     if(selectedDoc === '') {
@@ -157,14 +162,6 @@ function ClipNav() {
                         value={uploadInfo.title}
                         onChange={handleUploadInfo} />
                 </label>
-                <label>
-                    Description
-                    <input
-                        name="body"
-                        type="text"
-                        value={uploadInfo.body}
-                        onChange={handleUploadInfo} />
-                </label>
                 <input type="file" onChange={handleFileChange} />
                 <button>Upload File</button>
             </form>
@@ -192,6 +189,7 @@ function ClipNav() {
                                     <span>{item.title}</span> | 
                                     <button onClick={event => {
                                         event.preventDefault()
+                                        downloadFile(item._id)
                                     }}>Download ⬇️</button>
                                     <button onClick={event => {
                                         event.preventDefault()

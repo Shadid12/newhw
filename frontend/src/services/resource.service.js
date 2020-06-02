@@ -36,3 +36,13 @@ export const deleteResource = async id => {
         return error
     }
 }
+
+export const downloadResource = async id => {
+    window.location.href(SERVER_URL + 'resources/download/' + id)
+    // try {
+    //     const res = await axios.get(SERVER_URL + 'resources/download/' + id);
+    //     return res.data
+    // } catch (error) {
+    //     return error
+    // }
+}

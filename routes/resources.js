@@ -4,7 +4,8 @@ const {
   getResource,
   createResource,
   updateResource,
-  deleteResource
+  deleteResource,
+  downloadResource
 } = require('../controllers/resources');
 
 const multer = require('multer');
@@ -15,6 +16,7 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     req.body.body = Date.now() + '-' + file.originalname;
+    req.body.mimeType = file.mimetype
     cb(null, Date.now() + '-' + file.originalname)
   }
 })
@@ -34,5 +36,9 @@ router
   .get(getResource)
   .put(updateResource)
   .delete(deleteResource);
+
+router
+  .route('/download/:id')
+  .get(downloadResource)
 
 module.exports = router;
