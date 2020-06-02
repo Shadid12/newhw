@@ -3,9 +3,10 @@ import DocumentContext,
 { 
     UPDATE_CURRENT_DOCUMENT, 
     NEW_DOCUMENT_CREATED,
-    UPDATE_SINGLE_DOCUMENT
+    UPDATE_SINGLE_DOCUMENT,
+    DELETE_SINGLE_DOCUMET
 } from '../DocumentContext';
-import { create, update } from '../services/document.service'
+import { create, update, deleteDoc } from '../services/document.service'
 
 function EditDoc() {
     const [loading, setLoading] = React.useState(false)
@@ -15,6 +16,16 @@ function EditDoc() {
     const handleInputChange = event => {
         const {name, value} = event.target
         contextVal.updateState({type: UPDATE_CURRENT_DOCUMENT, payload: {name, value}})
+    }
+
+    const deleteCurrentDoc = async event => {
+        event.preventDefault();
+        setLoading(true);
+        const res = await deleteDoc(selectedDoc);
+        if(res.success) {
+            contextVal.updateState({type: DELETE_SINGLE_DOCUMET, payload: selectedDoc})
+        }
+        setLoading(false)
     }
 
     const handleSubmit = async event => {
@@ -68,7 +79,7 @@ function EditDoc() {
             <br />
             <input type="submit" value="Save" />
             {selectedDoc !== '' && selectedDoc !== 'unsaved' ? (
-                <button>Delete 🗑️</button>
+                <button onClick={deleteCurrentDoc}>Delete 🗑️</button>
             ) : null}
         </form>
     )

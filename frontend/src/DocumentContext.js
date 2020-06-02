@@ -11,6 +11,7 @@ export const CREATE_NEW_DOC = 'CREATE_NEW_DOC';
 export const NEW_DOCUMENT_CREATED = 'NEW_DOCUMENT_CREATED';
 export const EDIT_DOCUMENT = 'EDIT_DOCUMENT';
 export const UPDATE_SINGLE_DOCUMENT = 'UPDATE_SINGLE_DOCUMENT';
+export const DELETE_SINGLE_DOCUMET = 'DELETE_SINGLE_DOCUMET';
 
 const initialState = {
   docTitle: "Untitled*",
@@ -63,6 +64,7 @@ export class DocumentContextProvider extends React.Component {
             newDocuments.push(payload)
             return {
               ...prevState,
+              selectedDoc: payload._id,
               documents: newDocuments
             }
           });
@@ -85,6 +87,17 @@ export class DocumentContextProvider extends React.Component {
               documents: newDocuments
             }
           }); 
+          break;
+        case DELETE_SINGLE_DOCUMET:
+          this.setState(prevState => {
+            const newDocuments = JSON.parse(JSON.stringify(prevState.documents)); 
+            const index = newDocuments.findIndex((i) => i._id === payload);
+            newDocuments.splice(index, 1)
+            return {
+              ...prevState,
+              documents: newDocuments
+            }
+          });
           break;
         default:
           break;
