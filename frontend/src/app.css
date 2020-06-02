@@ -1,0 +1,11 @@
+.navigation-title {
+    display: inline;
+    font-size: 1.6rem;
+    line-height: 5.2rem;
+    padding: 0px 10px;
+    text-decoration: none;
+}
+
+.home {
+    display: flex;
+}

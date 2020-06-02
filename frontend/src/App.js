@@ -6,58 +6,33 @@ import {
   Link
 } from "react-router-dom";
 import Home from './containers/Home'
+import AllRef from './containers/AllRef'
 import { DocumentContextProvider } from './DocumentContext';
+import './app.css';
 
 function App() {
   return (
     <Router>
       <DocumentContextProvider>
-      <div>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/about">About</Link>
-          </li>
-          <li>
-            <Link to="/dashboard">Dashboard</Link>
-          </li>
-        </ul>
-
-        <hr />
+      <main className="wrapper">
+        <nav className="navigation">
+          <section className="container">
+            <Link to="/" className="navigation-title">Home</Link>
+            <Link to="/about" className="navigation-title">References</Link>
+          </section>
+        </nav>
 
         <Switch>
           <Route exact path="/">
             <Home />
           </Route>
           <Route path="/about">
-            <About />
-          </Route>
-          <Route path="/dashboard">
-            <Dashboard />
+            <AllRef />
           </Route>
         </Switch>
-      </div>
+      </main>
       </DocumentContextProvider>
     </Router>
-  );
-}
-
-
-function About() {
-  return (
-    <div>
-      <h2>About</h2>
-    </div>
-  );
-}
-
-function Dashboard() {
-  return (
-    <div>
-      <h2>Dashboard</h2>
-    </div>
   );
 }
 

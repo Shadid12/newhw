@@ -12,14 +12,14 @@ function DocList() {
     }
 
     return(
-        <ul>
+        <div>
             {documents.map(item => (
-                <li key={item._id}>
-                    {item.title}
+                <span key={item._id}>
+                    <span>{item.title}</span>
                     <button onClick={() => editDoc(item)}>Edit ✏️</button>
-                </li>
+                </span>
             ))}
-        </ul>
+        </div>
     )
 }
 

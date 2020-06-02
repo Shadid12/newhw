@@ -33,6 +33,10 @@ function ClipNav() {
 
     const handleSubmit = async event => {
         event.preventDefault();
+        if(selectedDoc === 'unsaved') {
+            alert('You must save your document first before you can attach references')
+            return;
+        }
         let payload = {
             title: resourceTitle,
             body: resourceBody,
@@ -80,7 +84,6 @@ function ClipNav() {
         
         try {
             const ress = await axios.post("http://localhost:5000/api/v1/resources", data, {});
-            console.log('---->>>', ress)
             if(ress.data.success) {
                 setUploadInfo({
                     title: '',

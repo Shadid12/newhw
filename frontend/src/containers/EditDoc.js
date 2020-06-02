@@ -8,6 +8,8 @@ import DocumentContext,
 } from '../DocumentContext';
 import { create, update, deleteDoc } from '../services/document.service'
 
+import './edit-doc.css'
+
 function EditDoc() {
     const [loading, setLoading] = React.useState(false)
     const contextVal = React.useContext(DocumentContext);
@@ -55,9 +57,10 @@ function EditDoc() {
         
     }
     if(!selectedDoc || selectedDoc === '') {
-        return <div>Create a new Document or select an existing Document to get started</div>
+        return <div className="edit-des">Create a new Document or select an existing Document to get started</div>
     }
     return (
+        <div className="edit-d">
         <form onSubmit={handleSubmit}>
             <label>
                 Title
@@ -79,9 +82,10 @@ function EditDoc() {
             <br />
             <input type="submit" value="Save" />
             {selectedDoc !== '' && selectedDoc !== 'unsaved' ? (
-                <button onClick={deleteCurrentDoc}>Delete 🗑️</button>
+                <button onClick={deleteCurrentDoc} className="del-btn">Delete 🗑️</button>
             ) : null}
         </form>
+        </div>
     )
 }
 

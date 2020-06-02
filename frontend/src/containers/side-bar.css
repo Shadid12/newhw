@@ -1,5 +1,6 @@
 .sidebar {
-    border: 1px solid pink;
+    max-width: 200px;
+    height: 80vh;
 }
 
 .empty-doc {
