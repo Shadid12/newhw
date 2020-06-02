@@ -1,5 +1,6 @@
 import React from "react";
-import { getAll } from './services/document.service'
+import { getAll } from './services/document.service';
+import { getAllResouces } from './services/resource.service';
 
 const DocumentContext = React.createContext();
 
@@ -12,6 +13,8 @@ export const NEW_DOCUMENT_CREATED = 'NEW_DOCUMENT_CREATED';
 export const EDIT_DOCUMENT = 'EDIT_DOCUMENT';
 export const UPDATE_SINGLE_DOCUMENT = 'UPDATE_SINGLE_DOCUMENT';
 export const DELETE_SINGLE_DOCUMET = 'DELETE_SINGLE_DOCUMET';
+export const UPDATE_RESOURCE = 'UPDATE_RESOURCE';
+export const RELOAD_RESOURCES = 'RELOAD_RESOURCES';
 
 const initialState = {
   docTitle: "Untitled*",
@@ -27,7 +30,9 @@ export class DocumentContextProvider extends React.Component {
       resourceTitle: "",
       resourceBody: "",
       selectedDoc: "",
-      documents: []
+      resourceId: "unsaved",
+      documents: [],
+      resources: []
     };
 
     async componentDidMount() {
@@ -35,9 +40,16 @@ export class DocumentContextProvider extends React.Component {
       if(!res.success) {
         alert('Server Error!! please reload page') // TODO handle error with UI friendly method
       }
+
+      const resources = await getAllResouces();
+      if(!resources.success) {
+        alert('Failed to load resources, Please reload this page') // TODO handle error with UI friendly method
+      }
+
       this.setState(prevState => ({
         ...prevState,
-        documents: res.data
+        documents: res.data,
+        resources: resources.data
       }))
     }
 
@@ -96,6 +108,35 @@ export class DocumentContextProvider extends React.Component {
             return {
               ...prevState,
               documents: newDocuments
+            }
+          });
+          break;
+        case UPDATE_RESOURCE:
+          this.setState(prevState => {
+            return {
+              ...prevState,
+              resourceTitle: payload.title,
+              resourceBody: payload.body,
+              resourceId: payload._id
+            }
+          });
+          break;
+
+        case RELOAD_RESOURCES:
+          this.setState(prevState => {
+            const newResources = JSON.parse(JSON.stringify(prevState.resources)); 
+            const index = newResources.findIndex((i) => i._id === payload._id);
+            if(index > -1) {
+              newResources[index] = payload
+            } else {
+              newResources.push(payload)
+            }
+            return {
+              ...prevState,
+              resources: newResources,
+              resourceId: 'unsaved',
+              resourceTitle: '', 
+              resourceBody: ''
             }
           });
           break;

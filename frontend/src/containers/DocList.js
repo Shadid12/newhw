@@ -5,7 +5,6 @@ function DocList() {
     const contextVal = React.useContext(DocumentContext);
     const { documents } =  contextVal.state;
     React.useEffect(() => {
-        console.log('--->', documents)
     },[documents])
 
     const editDoc = docItem => {

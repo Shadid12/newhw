@@ -1,7 +1,7 @@
 import React from 'react';
-import Resource from './Resource';
 import Sidebar from './Sidebar';
 import EditDoc from './EditDoc';
+import ClipNav from './ClipNav';
 
 function Home() {
 
@@ -9,7 +9,7 @@ function Home() {
       <div>
         <Sidebar />
         <EditDoc />
-        <Resource />
+        <ClipNav />
       </div>
     );
 }
